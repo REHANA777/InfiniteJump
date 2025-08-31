@@ -12,12 +12,12 @@ ScreenGui.Name = "InfiniteJumpGui"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = CoreGui
 
--- Smaller Button
+-- Small circular button
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Size = UDim2.new(0, 50, 0, 50)
 ToggleButton.Position = UDim2.new(0.5, -25, 0.5, -25)
-ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0,0,0)
+ToggleButton.TextColor3 = Color3.fromRGB(255,255,255)
 ToggleButton.Text = "OFF"
 ToggleButton.Font = Enum.Font.SourceSansBold
 ToggleButton.TextScaled = true
@@ -26,15 +26,13 @@ ToggleButton.Parent = ScreenGui
 ToggleButton.BackgroundTransparency = 0.3
 ToggleButton.BorderSizePixel = 0
 ToggleButton.TextWrapped = true
-ToggleButton.TextStrokeTransparency = 0
 ToggleButton.Active = true
 
--- Make circular
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0.5, 0)
+UICorner.CornerRadius = UDim.new(0.5,0)
 UICorner.Parent = ToggleButton
 
--- Dragging for mobile
+-- Dragging (mobile)
 local dragging = false
 local dragStartPos
 local touchStartPos
@@ -44,7 +42,6 @@ ToggleButton.InputBegan:Connect(function(input)
         dragging = true
         touchStartPos = input.Position
         dragStartPos = ToggleButton.Position
-
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
@@ -57,10 +54,8 @@ UserInputService.InputChanged:Connect(function(input)
     if dragging and input.UserInputType == Enum.UserInputType.Touch then
         local delta = input.Position - touchStartPos
         ToggleButton.Position = UDim2.new(
-            dragStartPos.X.Scale,
-            dragStartPos.X.Offset + delta.X,
-            dragStartPos.Y.Scale,
-            dragStartPos.Y.Offset + delta.Y
+            dragStartPos.X.Scale, dragStartPos.X.Offset + delta.X,
+            dragStartPos.Y.Scale, dragStartPos.Y.Offset + delta.Y
         )
     end
 end)
@@ -71,12 +66,9 @@ ToggleButton.MouseButton1Click:Connect(function()
     ToggleButton.Text = infiniteJumpEnabled and "ON" or "OFF"
 end)
 
--- Smooth Infinite Jump logic
+-- Infinite Jump logic (wajar, selalu bisa loncat)
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-        local humanoid = LocalPlayer.Character.Humanoid
-        if humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        end
+        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end
 end)
