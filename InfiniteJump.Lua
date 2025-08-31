@@ -14,7 +14,7 @@ ScreenGui.Parent = CoreGui
 
 -- Smaller Button
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 50, 0, 50) -- lebih kecil
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
 ToggleButton.Position = UDim2.new(0.5, -25, 0.5, -25)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -27,7 +27,7 @@ ToggleButton.BackgroundTransparency = 0.3
 ToggleButton.BorderSizePixel = 0
 ToggleButton.TextWrapped = true
 ToggleButton.TextStrokeTransparency = 0
-ToggleButton.Active = true -- penting
+ToggleButton.Active = true
 
 -- Make circular
 local UICorner = Instance.new("UICorner")
@@ -71,9 +71,12 @@ ToggleButton.MouseButton1Click:Connect(function()
     ToggleButton.Text = infiniteJumpEnabled and "ON" or "OFF"
 end)
 
--- Infinite Jump logic
+-- Smooth Infinite Jump logic
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        local humanoid = LocalPlayer.Character.Humanoid
+        if humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
     end
 end)
