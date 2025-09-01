@@ -60,15 +60,36 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+-- Update button UI
+local function UpdateButtonUI()
+    if infiniteJumpEnabled then
+        ToggleButton.Text = "ON"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- hijau
+    else
+        ToggleButton.Text = "OFF"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- hitam
+    end
+end
+
 -- Toggle Infinite Jump
 ToggleButton.MouseButton1Click:Connect(function()
     infiniteJumpEnabled = not infiniteJumpEnabled
-    ToggleButton.Text = infiniteJumpEnabled and "ON" or "OFF"
+    UpdateButtonUI()
 end)
 
--- Infinite Jump logic (wajar, selalu bisa loncat)
+-- Infinite Jump logic (natural, auto-detect JumpPower)
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
+        local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+        if humanoid and hrp then
+            local jumpPower = humanoid.UseJumpPower and humanoid.JumpPower or 50
+            hrp.Velocity = Vector3.new(hrp.Velocity.X, jumpPower, hrp.Velocity.Z)
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
     end
 end)
+
+-- Set UI awal
+UpdateButtonUI()
