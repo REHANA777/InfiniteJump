@@ -77,15 +77,11 @@ ToggleButton.MouseButton1Click:Connect(function()
     UpdateButtonUI()
 end)
 
--- Infinite Jump logic (natural, auto-detect JumpPower)
+-- Infinite Jump logic (natural, tanpa dorongan)
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
         local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
-        local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-
-        if humanoid and hrp then
-            local jumpPower = humanoid.UseJumpPower and humanoid.JumpPower or 50
-            hrp.Velocity = Vector3.new(hrp.Velocity.X, jumpPower, hrp.Velocity.Z)
+        if humanoid then
             humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
         end
     end
